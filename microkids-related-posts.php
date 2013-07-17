@@ -199,7 +199,8 @@ function MRP_inner_custom_box() {
 	foreach($post_types as $post_type) {
 	    $related_posts[$post_type] = MRP_get_related_posts( $post_ID, 1, 0, $post_type );
 	    $ext = "-".$n;
-	    $post_type_details = array_shift(get_post_types(array('name' => $post_type), 'objects'));
+        $post_objects      = get_post_types(array('name' => $post_type), 'objects');
+	    $post_type_details = array_shift($post_objects);
 	    $current = ($n==1) ? ' MRP_current_tab' : '';
 	    $related_posts_count = count($related_posts[$post_type]);
 	    echo '<div class="MRP_tab'.$current.'"><a href="javascript:void(0)" rel="MRP_post_type'.$ext.'">'.__( $post_type_details->labels->name, 'microkids-related-posts' ).' (<span id="MRP_related_count'.$ext.'" class="MRP_related_count">'.$related_posts_count.'</span>)</a></div>';
