@@ -425,7 +425,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		# Reciprocal query by Peter Raganitsch @ http://blog.oracleapex.at)
 		$query = "
 		SELECT * FROM (
-		SELECT position2 as position_unified, wp.*, wpr.* ".
+		SELECT position1 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
 			"WHERE wpr.post1_id = $post_id ".
@@ -446,7 +446,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		//$query .= $order;
 		$query .= ") AS tab1 UNION ALL ".
 			"SELECT * FROM (".
-			"SELECT position1 as position_unified, wp.*, wpr.* ".
+			"SELECT position2 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
 			"WHERE wpr.post2_id = $post_id ".
@@ -467,7 +467,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		$query.= ") AS tab2";
 		# Add order SQL
 		$query .= $order;
-		//echo $query;die(); 
+		//echo $query;die();
 	}
 	# Not reciprocal
 	else {
