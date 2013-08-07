@@ -897,11 +897,11 @@ function MRP_disable_empty_text() {
                 <br/>
                 <input name="MRP_order_type" type="radio" id="MRP_order_type_auto" value="auto"<?php if( $options['order_type'] == "auto" ) : ?>checked="checked"<?php endif; ?> /> <label for="MRP_order_type_auto"><?php _e( 'Automatically', 'microkids-related-posts' ); ?> </label>
     		    <select name="MRP_order" id="MRP_order">
-            	    <option value="date_desc"<?php if($options['order'] == 'date_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, new to old', 'microkids-related-posts' ); ?></option>
-        	        <option value="date_asc"<?php if($options['order'] == 'date_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, old to new', 'microkids-related-posts' ); ?></option>
-        	        <option value="title_asc"<?php if($options['order'] == 'title_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically A→Z', 'microkids-related-posts' ); ?></option>
-        	        <option value="title_desc"<?php if($options['order'] == 'title_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically Z→A', 'microkids-related-posts' ); ?></option>
-        	        <option value="random"<?php if($options['order'] == 'random') : ?> selected="selected"<?php endif; ?>><?php _e( 'randomly', 'microkids-related-posts' ); ?></option>
+            	    <option value="date_desc"<?php if(isset($options['order']) && $options['order'] == 'date_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, new to old', 'microkids-related-posts' ); ?></option>
+        	        <option value="date_asc"<?php if(isset($options['order']) && $options['order'] == 'date_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, old to new', 'microkids-related-posts' ); ?></option>
+        	        <option value="title_asc"<?php if(isset($options['order']) && $options['order'] == 'title_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically A→Z', 'microkids-related-posts' ); ?></option>
+        	        <option value="title_desc"<?php if(isset($options['order']) && $options['order'] == 'title_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically Z→A', 'microkids-related-posts' ); ?></option>
+        	        <option value="random"<?php if(isset($options['order']) && $options['order'] == 'random') : ?> selected="selected"<?php endif; ?>><?php _e( 'randomly', 'microkids-related-posts' ); ?></option>
         	    <select>                	
             </td>
         </tr>
