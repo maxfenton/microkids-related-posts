@@ -426,7 +426,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		# Reciprocal query by Peter Raganitsch @ http://blog.oracleapex.at)
 		$query = "
 		SELECT * FROM (
-		SELECT position2 as position_unified, wp.*, wpr.* ".
+		SELECT position1 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
 			"WHERE wpr.post1_id = $post_id ".
@@ -447,7 +447,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		//$query .= $order;
 		$query .= ") AS tab1 UNION ALL ".
 			"SELECT * FROM (".
-			"SELECT position1 as position_unified, wp.*, wpr.* ".
+			"SELECT position2 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
 			"WHERE wpr.post2_id = $post_id ".
@@ -468,7 +468,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		$query.= ") AS tab2";
 		# Add order SQL
 		$query .= $order;
-		//echo $query;die(); 
+		//echo $query;die();
 	}
 	# Not reciprocal
 	else {
@@ -898,11 +898,11 @@ function MRP_disable_empty_text() {
                 <br/>
                 <input name="MRP_order_type" type="radio" id="MRP_order_type_auto" value="auto"<?php if( $options['order_type'] == "auto" ) : ?>checked="checked"<?php endif; ?> /> <label for="MRP_order_type_auto"><?php _e( 'Automatically', 'microkids-related-posts' ); ?> </label>
     		    <select name="MRP_order" id="MRP_order">
-            	    <option value="date_desc"<?php if($options['order'] == 'date_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, new to old', 'microkids-related-posts' ); ?></option>
-        	        <option value="date_asc"<?php if($options['order'] == 'date_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, old to new', 'microkids-related-posts' ); ?></option>
-        	        <option value="title_asc"<?php if($options['order'] == 'title_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically A→Z', 'microkids-related-posts' ); ?></option>
-        	        <option value="title_desc"<?php if($options['order'] == 'title_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically Z→A', 'microkids-related-posts' ); ?></option>
-        	        <option value="random"<?php if($options['order'] == 'random') : ?> selected="selected"<?php endif; ?>><?php _e( 'randomly', 'microkids-related-posts' ); ?></option>
+            	    <option value="date_desc"<?php if(isset($options['order']) && $options['order'] == 'date_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, new to old', 'microkids-related-posts' ); ?></option>
+        	        <option value="date_asc"<?php if(isset($options['order']) && $options['order'] == 'date_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'by date, old to new', 'microkids-related-posts' ); ?></option>
+        	        <option value="title_asc"<?php if(isset($options['order']) && $options['order'] == 'title_asc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically A→Z', 'microkids-related-posts' ); ?></option>
+        	        <option value="title_desc"<?php if(isset($options['order']) && $options['order'] == 'title_desc') : ?> selected="selected"<?php endif; ?>><?php _e( 'alphabetically Z→A', 'microkids-related-posts' ); ?></option>
+        	        <option value="random"<?php if(isset($options['order']) && $options['order'] == 'random') : ?> selected="selected"<?php endif; ?>><?php _e( 'randomly', 'microkids-related-posts' ); ?></option>
         	    <select>                	
             </td>
         </tr>
