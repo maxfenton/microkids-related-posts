@@ -303,6 +303,7 @@ function MRP_save_postdata( $post_id ) {
 			foreach($related_posts as $rel_cct_list){
 				$order_counter = 0;
 				foreach($rel_cct_list as $rel_post){
+					$rel_post = (int) wp_kses($rel_post);
 					$not_updatable = true;
 					foreach($existing_ones AS $k=>$v){
 						if($rel_post == $v->post1_id OR $rel_post == $v->post2_id){
