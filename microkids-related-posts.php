@@ -4,7 +4,7 @@ Plugin Name: Microkid's Related Posts
 Plugin URI: http://www.microkid.net/wordpress/related-posts/
 Description: Display a set of manually selected related items with your posts
 Author: Microkid
-Version: 4.0.3.2 
+Version: 4.0.3.3 
 Author URI: http://www.superinteractive.com
 
 This software is distributed in the hope that it will be useful,
@@ -528,9 +528,9 @@ function MRP_ajax_listener() {
 */ 
 function MRP_ajax_search_results() {
 	global $wpdb;
-	$s = $wpdb->escape( rawurldecode( $_GET['mrp_s'] ) );
+	$s = esc_sql( rawurldecode( $_GET['mrp_s'] ) );
 	$scope = (int) $_GET['mrp_scope'];
-	$post_type = $wpdb->escape( $_GET['mrp_post_type'] );
+	$post_type = esc_sql( $_GET['mrp_post_type'] );
 	$regexp = "[[:<:]]" . $s;
 	$where = "";
 	switch( $scope ) {
