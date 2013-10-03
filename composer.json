@@ -1,0 +1,6 @@
+{
+  "name": "wp/microkids-related-posts",
+  "description": "Unofficial github mirror for wordpress plugin",
+  "keywords": ["wordpress", "plugin"],
+  "type": "wordpress-plugin"
+}
