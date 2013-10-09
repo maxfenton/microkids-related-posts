@@ -297,7 +297,7 @@ function MRP_save_postdata( $post_id ) {
 	if( $related_posts ) {
 		$options = get_option("MRP_options");
 		if($options['display_reciprocal']) {
-			$query = "SELECT * FROM ".$wpdb->prefix."post_relationships WHERE post1_id=".$post_id." OR post2_id=".$post_id.";";
+			$query = $wpdb->prepare("SELECT * FROM ".$wpdb->prefix."post_relationships WHERE post1_id=%d OR post2_id=%d;", $post_id, $post_id);
 			$existing_ones = $wpdb->get_results( $query );
 			$query="";
 			foreach($related_posts as $rel_cct_list){
@@ -308,11 +308,11 @@ function MRP_save_postdata( $post_id ) {
 					foreach($existing_ones AS $k=>$v){
 						if($rel_post == $v->post1_id OR $rel_post == $v->post2_id){
 							if($v->post1_id == $post_id){
-								$left_q = "post1_id=".$post_id;
+								$left_q = "post1_id=".esc_sql($post_id);
 								$right_q = "post2_id=".$v->post2_id;
 								$relation_order = "position1=".$order_counter;
 							} else {
-								$left_q = "post1_id=".$post_id;
+								$left_q = "post1_id=".esc_sql($post_id);
 								$right_q = "post1_id=".$v->post1_id;
 								$relation_order = "position2=".$order_counter;
 							}
@@ -326,7 +326,7 @@ function MRP_save_postdata( $post_id ) {
 						}
 					}
 					if($not_updatable){
-						$query = "INSERT INTO ".$wpdb->prefix."post_relationships VALUES ($post_id,$rel_post,$order_counter,0);";
+						$query = $wpdb->prepare("INSERT INTO ".$wpdb->prefix."post_relationships VALUES (%d,%d,%d,0);", $post_id, $rel_post, $order_counter);
 						$result = $wpdb->query( $query );
 					}
 					$order_counter++;
@@ -341,7 +341,7 @@ function MRP_save_postdata( $post_id ) {
 						$side = "post2_id";
 						$post_in_relation = "post1_id=".$v->post1_id;
 					}
-					$query = "DELETE FROM ".$wpdb->prefix."post_relationships WHERE ".$side."=".$post_id." AND ".$post_in_relation.";";
+					$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE ".$side."=%s AND ".$post_in_relation.";", $post_id);
 					$result = $wpdb->query( $query );
 				}
 			}
@@ -352,13 +352,13 @@ function MRP_save_postdata( $post_id ) {
 				foreach($related_post_sub_list AS $related_post){
 					$related_post = (int) $related_post;
 					$new_count = $counter++;
-					$query = "INSERT INTO ".$wpdb->prefix."post_relationships VALUES( $post_id, $related_post , 0, $new_count )";
+					$query = $wpdb->prepare("INSERT INTO ".$wpdb->prefix."post_relationships VALUES( %d, %d, 0, %d)", $post_id, $related_post, $new_count);
 					$result = $wpdb->query( $query );
 				}
 			}
 			
 		}
-	}	
+	}
 }
 
 /**
@@ -370,10 +370,10 @@ function MRP_save_postdata( $post_id ) {
 	global $wpdb;
 	$options = get_option("MRP_options");
 	if($options['display_reciprocal']) {
-		$query = "DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = $post_id OR post2_id = $post_id";
+		$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = %d OR post2_id = %d", $post_id);
 	}
 	else {
-		$query = "DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = $post_id";
+		$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = %d", $post_id);
 	}
 	$delete = $wpdb->query( $query );
 }
@@ -424,13 +424,13 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
     }
 	if($options['display_reciprocal']) {
 		# Reciprocal query by Peter Raganitsch @ http://blog.oracleapex.at)
-		$query = "
+		$query = $wpdb->prepare("
 		SELECT * FROM (
 		SELECT position1 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
-			"WHERE wpr.post1_id = $post_id ".
-			"AND wp.id = wpr.post2_id ";
+			"WHERE wpr.post1_id = %d ".
+			"AND wp.id = wpr.post2_id ", $post_id);
 		# Hide unpublished?
 		if( $hide_unpublished ) {
 			$query .= " AND wp.post_status IN (".implode( ",", $post_status ).") ";
@@ -446,12 +446,12 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 		}
 		//$query .= $order;
 		$query .= ") AS tab1 UNION ALL ".
-			"SELECT * FROM (".
+			$wpdb->prepare("SELECT * FROM (".
 			"SELECT position2 as position_unified, wp.*, wpr.* ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			",".$wpdb->prefix."posts					wp ".
-			"WHERE wpr.post2_id = $post_id ".
-			"AND wp.id = wpr.post1_id ";
+			"WHERE wpr.post2_id = %s ".
+			"AND wp.id = wpr.post1_id ", $post_id);
 		# Hide unpublished?
 		if( $hide_unpublished ) {
 			$query .= "AND wp.post_status IN (".implode( ",", $post_status ).") ";
@@ -472,11 +472,11 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 	}
 	# Not reciprocal
 	else {
-		$query = "SELECT *, position1 AS position_unified ".
+		$query = $wpdb->prepare("SELECT *, position1 AS position_unified ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			" JOIN ".$wpdb->prefix."posts				wp ".
 			"	ON wpr.post2_id = wp.ID ".
-			"WHERE wpr.post1_id = $post_id";
+			"WHERE wpr.post1_id = %s", $post_id);
 		# Hide unpublished?
 		if( $hide_unpublished) {
 			$query .= " AND wp.post_status IN (".implode( ",", $post_status ).") ";
@@ -544,7 +544,7 @@ function MRP_ajax_search_results() {
 			$where = "( post_title REGEXP '$regexp' OR post_content REGEXP '$regexp' )";
 			break;
 	}
-	$query = "SELECT ID, post_title, post_type, post_status FROM $wpdb->posts WHERE $where AND post_type = '$post_type' ";
+	$query = $wpdb->prepare("SELECT ID, post_title, post_type, post_status FROM $wpdb->posts WHERE $where AND post_type = %s ", $post_type);
 	if( $_GET['mrp_id'] ) {
 		$this_id = (int) $_GET['mrp_id'];
 		$query .= " AND ID != $this_id ";
