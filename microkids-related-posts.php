@@ -292,6 +292,7 @@ function MRP_save_postdata( $post_id ) {
  function MRP_save_relationships( $post_id, $related_posts ) {
 	global $wpdb;
     # First delete the relationships that were there before
+    $post_id = esc_sql($post_id);
 	MRP_delete_relationships( $post_id ); 
     # Now add/update the relations
 	if( $related_posts ) {
@@ -308,11 +309,11 @@ function MRP_save_postdata( $post_id ) {
 					foreach($existing_ones AS $k=>$v){
 						if($rel_post == $v->post1_id OR $rel_post == $v->post2_id){
 							if($v->post1_id == $post_id){
-								$left_q = "post1_id=".esc_sql($post_id);
+								$left_q = "post1_id=".$post_id;
 								$right_q = "post2_id=".$v->post2_id;
 								$relation_order = "position1=".$order_counter;
 							} else {
-								$left_q = "post1_id=".esc_sql($post_id);
+								$left_q = "post1_id=".$post_id;
 								$right_q = "post1_id=".$v->post1_id;
 								$relation_order = "position2=".$order_counter;
 							}
