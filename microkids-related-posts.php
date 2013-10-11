@@ -371,7 +371,7 @@ function MRP_save_postdata( $post_id ) {
 	global $wpdb;
 	$options = get_option("MRP_options");
 	if($options['display_reciprocal']) {
-		$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = %d OR post2_id = %d", $post_id);
+		$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = %d OR post2_id = %d", $post_id, $post_id);
 	}
 	else {
 		$query = $wpdb->prepare("DELETE FROM ".$wpdb->prefix."post_relationships WHERE post1_id = %d", $post_id);
