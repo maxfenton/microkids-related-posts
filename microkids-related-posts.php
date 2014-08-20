@@ -473,7 +473,7 @@ function MRP_get_related_posts( $post_id, $return_object = false, $hide_unpublis
 	}
 	# Not reciprocal
 	else {
-		$query = $wpdb->prepare("SELECT *, position1 AS position_unified ".
+		$query = $wpdb->prepare("SELECT *, position2 AS position_unified ".
 			"FROM ".$wpdb->prefix."post_relationships	wpr ".
 			" JOIN ".$wpdb->prefix."posts				wp ".
 			"	ON wpr.post2_id = wp.ID ".
