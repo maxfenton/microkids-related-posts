@@ -177,7 +177,7 @@ function MRP_load_admin_includes() {
  */
 function MRP_load_default_css() {
 	$options = get_option("MRP_options");
-	if( @$options['default_css'] == 1 ) {
+	if( !empty($options['default_css']) && $options['default_css'] == 1 ) {
 		echo '<link rel="stylesheet" type="text/css" href="'.WP_PLUGIN_URL.'/microkids-related-posts/microkids-related-posts-default.css" />';
 	}
 }
