@@ -82,8 +82,8 @@ class WP_Widget_Related_Posts extends WP_Widget {
 		$text_if_empty = esc_attr( $instance['text_if_empty'] );
 		$display_post_type = esc_attr( $instance['post_type'] );
 		$custom_post_types = get_post_types( array( '_builtin' => false ) , 'object' );
-		$show_thumbnail = (int) $instance['show_thumbnail'];
-		$thumbnail_size = esc_attr($instance['thumbnail_size']);
+		$show_thumbnail = ( !empty( $instance['show_thumbnail'] ) ? (int) $instance['show_thumbnail'] : 0);
+		$thumbnail_size = ( !empty( $instance['thumbnail_size'] ) ? esc_attr($instance['thumbnail_size']) : '');
         ?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		<p><label for="<?php echo $this->get_field_id('post_type') ?>"><?php _e( 'Post type to display:', 'microkids-related-posts' ); ?></label>
